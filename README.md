@@ -16,6 +16,10 @@
     └── init.pp
 ```
 
+### Must Read
+
+- [Puppet Extension Points - Part 2](http://www.masterzen.fr/2011/11/02/puppet-extension-point-part-2/)
+
 ### Run & Read
 
 - `puppet apply --modulepath=.. tests/init.pp`
