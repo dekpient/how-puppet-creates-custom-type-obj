@@ -36,8 +36,8 @@ Puppet::Type.type(:stuff).provide(:rubbish) do
   	Puppet.notice "#{resource[:name]} becomes shitty"
   end
 
-  def eat
-  	Puppet.notice "#{resource[:name]} has been chewed and swallowed"
+  def eaten_by(who)
+  	Puppet.notice "#{resource[:name]} has been chewed and swallowed by #{who.upcase}"
   end
 
   def names

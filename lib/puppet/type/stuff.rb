@@ -57,7 +57,7 @@ Puppet::Type.newtype(:stuff) do
   end
 
   newproperty(:color) do
-    newvalues(:red, :blue)
+    newvalues(:red, :blue, :event => :color_changed)
     # newvalue(:red) do
     #   provider.make_it_red
     # end
@@ -85,4 +85,8 @@ Puppet::Type.newtype(:stuff) do
     end
   end
 
+  def refresh_session(who_me)
+    Puppet.info "Refreshing session"
+    provider.eaten_by who_me
+  end
 end

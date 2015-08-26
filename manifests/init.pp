@@ -17,6 +17,16 @@ class how-puppet-creates-custom-type-obj {
     sec    => 2
   }
 
-  Wait['a while'] -> Stuff['magic']
+  boo { 'db':
+    refresh_session => "Stuff[magic]"
+  }
 
+  boo { 'join':
+    refresh_session => [Stuff['magic'], Stuff['hi']]
+  }
+
+  # magic first but boo should reload magic
+  Stuff['magic'] -> Boo['db']
+  Stuff['magic'] -> Boo['join']
+  Wait['a while'] -> Stuff['magic']
 }
