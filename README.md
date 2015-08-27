@@ -56,3 +56,46 @@ Puppet::Type::Stuff::ProviderRubbish # the provider
 7. Evaluation process doesn't occur until it should be done according to the relationship defined in the manifests (and Puppet's internal ordering algorithm - SHA1 of namevar?). That means property's methods like `insync?` or provider's methods like `exists?` won't be called until then. (Kinda good for (cached) instance variable lazy loading)
 
 8. If a resource doesn't exist and should be created, the `create` method must take care of setting all the properties. Their setter methods will not be called.
+
+# namevar VS title ...and aliases?
+
+- I think of namevar as the main primary key to the resource object in a map
+- The title is just an alias, but an alias must refer to EXACTLY ONE the resource object (an objects can many more aliases)
+- Most types use the title as the namevar if the namevar is omitted
+
+Basically,
+
+- there must be one and ONLY one resource with a particular namevar.
+- if there is a resource of type A that uses title 'B', NO other resource of the same type can use that title again
+
+...trying to declare another resource with the same namevar (regardless of how/if you define the title)? => BOOM
+
+```
+  file { 'hi': path => '/tmp/lol' }
+  file { '/tmp/lol': }
+=> Error: Duplicate declaration: File[/tmp/lol] is already declared ... cannot redeclare
+```
+
+...trying to alias a different title to resource with same namevar? => BOOM
+
+```
+  file { 'hi':       path => '/tmp/lol' }
+  file { 'hi again': path => '/tmp/lol' }
+=> Error: Cannot alias File[hi again] to ["/tmp/lol"] ... resource ["File", "/tmp/lol"] already declared
+```
+
+...trying to use the same alias for different resource? => Double BOOM
+
+```
+  file { 'hi': path => '/tmp/lol' }
+  file { 'hi': path => '/tmp/more_lol' }
+=> Error: Duplicate declaration: File[hi] is already declared ... cannot redeclare 
+=> Error: Duplicate declaration: File[hi] is already declared ... cannot redeclare
+```
+
+So, if both are provided on each declared resouce, they both must be different.
+
+```
+  file { 'hi:        path => '/tmp/lol' }
+  file { 'hi again': path => '/tmp/more_lol' }
+```

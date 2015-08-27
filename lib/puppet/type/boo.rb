@@ -5,8 +5,8 @@ Puppet::Type.newtype(:boo) do
     defaultto :present
   end
 
-  newparam(:name) do
-    desc "name."
+  newparam(:lol, :namevar => true) do
+    desc "lol name."
   end
 
   newparam(:refresh_session) do

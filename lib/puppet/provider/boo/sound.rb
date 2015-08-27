@@ -5,9 +5,9 @@ Puppet::Type.type(:boo).provide(:sound) do
   end
 
   def create
-    Puppet.notice "BOOOO!!!"
+    Puppet.notice "BOOOO!!! #{resource[:lol].upcase}"
    
-    resource[:refresh_session].each { |r| r.refresh_session resource[:name] }
+    resource[:refresh_session].each { |r| r.refresh_session resource[:name] } if resource[:refresh_session]
   end
   
 end

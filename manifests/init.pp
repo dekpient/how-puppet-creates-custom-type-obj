@@ -18,6 +18,7 @@ class how-puppet-creates-custom-type-obj {
   }
 
   boo { 'db':
+    lol             => 'duhhh',
     refresh_session => "Stuff[magic]"
   }
 
