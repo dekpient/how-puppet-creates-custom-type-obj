@@ -55,12 +55,12 @@ Puppet::Type::Stuff::ProviderRubbish # the provider
 
 7. Evaluation process doesn't occur until it should be done according to the relationship defined in the manifests (and Puppet's internal ordering algorithm - SHA1 of namevar?). That means property's methods like `insync?` or provider's methods like `exists?` won't be called until then. (Kinda good for (cached) instance variable lazy loading)
 
-8. If a resource doesn't exist and should be created, the `create` method must take care of setting all the properties. Their setter methods will not be called.
+8. If a resource doesn't exist and should be created, the `create` method must take care of setting all the properties. Their setter methods will not be called. (probably just the way `ensurable` resources are supposed to work)
 
 # namevar VS title ...and aliases?
 
 - I think of namevar as the main primary key to the resource object in a map
-- The title is just an alias, but an alias must refer to EXACTLY ONE the resource object (an objects can many more aliases)
+- The title is just an alias, but an alias must refer to EXACTLY ONE resource object (an object can have many aliases)
 - Most types use the title as the namevar if the namevar is omitted
 
 Basically,
@@ -89,7 +89,7 @@ Basically,
 ```
   file { 'hi': path => '/tmp/lol' }
   file { 'hi': path => '/tmp/more_lol' }
-=> Error: Duplicate declaration: File[hi] is already declared ... cannot redeclare 
+=> Error: Duplicate declaration: File[hi] is already declared ... cannot redeclare
 => Error: Duplicate declaration: File[hi] is already declared ... cannot redeclare
 ```
 
